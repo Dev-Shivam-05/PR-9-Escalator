@@ -1,6 +1,8 @@
 // Polymorphism :- Two Same Name Function But With different Works
 
 #include<iostream>
+#include <cstdlib>
+
 using namespace std;
 
 class Stack 
@@ -17,42 +19,51 @@ public:
         this->array = new int[capacity];
         this->top = -1;
     }
-
-    ~Stack()
+    
+    virtual void Push(int element) { }  
+    virtual void Pop() { }
+    virtual int Top() { return -1; }
+    virtual bool isEmpty() { return top == -1; }
+    virtual bool isFull() { return top + 1 == capacity; }
+    virtual void Clear() { top = -1; }
+    virtual int Size() { return top + 1; }
+    virtual void ViewStack() { }
+    virtual ~Stack()
     {
         delete[] array;
     }
+};
 
-    void Push(int element)
+class Display : public Stack
+{
+public:
+    Display(int size) : Stack (size){}
+
+    void Push(int element) override
     {
-        if (this->isEmpty())
-        {
-            this->array[++top] = element;
-        }
-        else if (this->isFull())
+        if (this->isFull())
         {
             cout << endl << "The Stack is Over Flowing...." << endl;
         }
         else
         {
-            this->top++;
-            this->array[top] = element;   
+            this->array[++top] = element;
         }
     }
 
-    int Pop()
+    void Pop() override
     {
         if (this->isEmpty())
         {
-            return -1;
+            cout << "The Stack is Already Empty...." << endl;
         }
         else
         {
-            return array[top--];
+            cout << array[top--] << " Is Removed." << endl;
         }
     }
 
-    int Top()
+    int Top() override
     {
         if (this->isEmpty())
         {
@@ -64,33 +75,52 @@ public:
         }
     }
 
-    bool isEmpty()
+    int Space() 
+    {
+        return capacity - (top + 1);
+    }
+
+    bool isEmpty() override
     {
         return top == -1;
     }
 
-    bool isFull()
+    bool isFull() override
     {
         return top + 1 == capacity;
     }
-};
 
-class Display : public Stack
-{
-public:
-    int Size()
+    void Clear() override
+    {
+    this->top = -1;
+    for (int i = 0; i < capacity; i++)
+    {
+        this->array[i] = 0;
+    }
+    cout << "\nThe Stack Is Cleared Sucessfully...." << endl;
+}
+
+
+    int Size() override
     {
         return top + 1;
     }
 
-    void ViewStack()
+    void ViewStack() override
     {
-        cout << endl <<"The Stack Is :- ";
-        for (int i = 0; i < top; i++)
+        if (this->isEmpty())
         {
-            cout << array[i] << " ";
+            cout << endl << "The Stack Is Already Empty..." << endl;
         }
-        cout << endl;
+        else
+        {
+            cout << endl <<"The Stack Is :- ";
+            for (int i = 0; i <= top; i++)
+            {
+                cout << array[i] << " ";
+            }
+            cout << endl;
+        }
     }
 };
 
@@ -101,7 +131,7 @@ int main()
     cout<< "Enter the Size Of Stack :- ";
     cin >> size;
 
-    Stack obj[size];
+    Display obj(size);
 
     int choice;
     do
@@ -112,8 +142,10 @@ int main()
         cout << "Press 3 To See the Top Most Element Of Stack." << endl;
         cout << "Press 4 To Check the Stack Is Empty Or Not." << endl;
         cout << "Press 5 To Check the Stack Is Full Or Not." << endl;
-        cout << "Press 6 To Check the Current Size Of Stack." << endl;
-        cout << "Press 7 To Displayt Full Stack." << endl;
+        cout << "Press 6 To Check How Much Space Is Left In Stack" << endl;
+        cout << "Press 7 To Check the Current Size Of Stack." << endl;
+        cout << "Press 8 To Display Full Stack." << endl;
+        cout << "Press 9 To Clear Full Stack !!." << endl;
         cout << "Press 0 To exit." << endl;
         
         cout << endl << "Enter Your Choice :- ";
@@ -123,6 +155,7 @@ int main()
         {
         case 0:
             cout << "\n ---- Your program Is Sucessfully Exited ----" << endl;
+            system("exit");
             break;
         
         case 1:
@@ -138,7 +171,7 @@ int main()
             break;
             
         case 3:
-            obj.Top();
+            cout << "The Top Most Element Of The Stack Is :- " << obj.Top() << endl;
             break;
             
         case 4:
@@ -157,6 +190,10 @@ int main()
             {
                 cout << endl << "The Stack is Full Or OverFlowing." << endl;
             }
+            else if (obj.isEmpty())
+            {
+                cout << endl << "The Stack Is Empty...." << endl;
+            }
             else
             {
                 cout << endl << "The Stack is Not Full." << endl;
@@ -164,11 +201,19 @@ int main()
             break;
         
         case 6:
+            cout << endl << "The Remaning Space In The Stack Is :- " << obj.Space() << " Out Of " << size << endl;
+            break;
+
+        case 7:
             cout << endl << "The Current Size of The Stack Is :- " << obj.Size() << endl;
             break;
         
-        case 7:
+        case 8:
             obj.ViewStack();
+            break;
+
+        case 9:
+            obj.Clear();
             break;
 
         default:
