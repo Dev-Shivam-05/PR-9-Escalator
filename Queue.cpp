@@ -37,13 +37,30 @@ public:
 
     void Enqueue(int element) 
     {
-        if (this->IsFull())
+        
+        if (this->front > 0 && this->rear == capicity - 1)
         {
-            cout << endl << "The Queue is Over Flowing...." << endl;
+            cout << endl << "You Need to Clear Full Queue.To Insert New Element...." << endl;
         }
         else
         {
-            this->array[++this->rear] = element;
+            if (this->IsFull())
+            {
+                cout << endl << "The Queue is Over Flowing...." << endl;
+                return;
+            }
+            else if (this->IsEmpty())
+            {
+                this->front = this->rear = 0;
+                this->array[rear] = element;
+                cout << endl << element << " Is Sucessfully Enqueued...." << endl << endl;
+            }
+            else
+            {
+                this->rear++;
+                this->array[rear] = element;
+                cout << endl << element << " Is Sucessfully Enqueued...." << endl << endl;
+            }
         }
     }
 
@@ -52,6 +69,10 @@ public:
         if (this->IsEmpty())
         {
             cout << endl << "The Queue Is Already Empty...." << endl;
+        }
+        else if (this->front == this->rear)
+        {
+            this->front = this->rear = -1;
         }
         else
         {
@@ -81,23 +102,24 @@ public:
         return (this->rear + 1) == this->capicity;
     }
 
-    void Clear ()
+    void Clear()
     {
         this->front = this->rear = -1;
-        for (int i=0; i<this->capicity; i++)
+        for (int i = 0; i < this->capicity; i++)
         {
             this->array[i] = 0;
         }
+        cout << endl << "The Queue Cleared Sucessfully...." << endl;
     }
 
     int Size()
     {
-        return  (this->rear + 1) - this->front;
+        return (this->rear + 1) - this->front;
     }
 
     int Remaning_Size()
     {
-        return this->capicity - (this->rear);
+        return this->capicity - this->Size();
     }
 
     void ViewQueue()
@@ -109,7 +131,7 @@ public:
         else
         {
             cout << endl << "The Queue Is :- ";
-            for (int i = this->front + 1; i <= this->rear; i++)
+            for (int i = this->front; i <= this->rear; i++)
             {
                 cout << array[i] << " ";
             }
@@ -131,8 +153,8 @@ int main()
 
     do
     {
-        cout << endl << "Program's" << endl;
-        cout << "Press 1 To Enqueue." << endl;        
+        cout << endl << "---- Program's ----" << endl;
+        cout << "Press 1 To Enqueue." << endl;              
         cout << "Press 2 To Dequeue." << endl;        
         cout << "Press 3 To See The Front Elemnt Of The Queue." << endl;        
         cout << "Press 4 To Check If The Queue is Empty Or Not." << endl;        
@@ -168,11 +190,11 @@ int main()
             break;
         
         case 4:
-            obj.IsEmpty();
+            (obj.IsEmpty() == 1) ? cout << endl << "The Queue Is Empty...." << endl : cout << endl << "The Queue Is Not Empty With The Size Of :- " << obj.Size() << endl;
             break;
         
         case 5:
-            obj.IsFull();
+            (obj.IsFull() == 1) ? cout << endl << "The Queue Is Full...." << endl : cout << endl << "The Queue Is Not Full With The Size Of :- " << obj.Size() << endl;
             break;
         
         case 6:
