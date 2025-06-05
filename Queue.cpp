@@ -18,14 +18,15 @@ public:
         delete[] array;
     }
 
-    virtual void Push(int element) {}
-    virtual int Pop() {}
-    virtual int Peek() {}
+    virtual void Enqueue(int element) {}
+    virtual void Dequeue() {}
+    virtual int Front() {}
+    virtual int Rear() {}
     virtual bool IsEmpty() {}
     virtual bool IsFull() {}
     virtual void Clear() {}
     virtual int Size() {}
-    int Size() {}
+    int Remaning_Size() {}
     virtual void ViewQueue() {}
 };
 
@@ -34,20 +35,19 @@ class Display : public Queue
 public:
     Display(int size) : Queue (size){}
 
-    void Push(int element) 
+    void Enqueue(int element) 
     {
-        if (this->IsEmpty())
+        if (this->IsFull())
         {
-            this->front = this->rear = 0;
-            this->array[front] = element;
+            cout << endl << "The Queue is Over Flowing...." << endl;
         }
-        else 
+        else
         {
-            this->array[front] = element;
+            this->array[++this->rear] = element;
         }
     }
 
-    void Pop()
+    void Dequeue()
     {
         if (this->IsEmpty())
         {
@@ -55,7 +55,7 @@ public:
         }
         else
         {
-            cout << endl << array[front++] << " Is Removed...." << endl;
+            cout << endl << array[this->front++] << " Is Removed...." << endl;
         }
     }
 
@@ -67,18 +67,18 @@ public:
         }
         else
         {
-            return array[front];
+            return array[this->front];
         }
     }
 
     bool IsEmpty()
     {
-        return rear == -1;
+        return this->rear == -1;
     }
 
     bool IsFull()
     {
-        return rear == capicity;
+        return (this->rear + 1) == this->capicity;
     }
 
     void Clear ()
@@ -86,17 +86,18 @@ public:
         this->front = this->rear = -1;
         for (int i=0; i<this->capicity; i++)
         {
-            array[i] = 0;
+            this->array[i] = 0;
         }
-    }
-    int Size()
-    {
-        return rear + 1;
     }
 
     int Size()
     {
-        return capicity - (rear + 1);
+        return  (this->rear + 1) - this->front;
+    }
+
+    int Remaning_Size()
+    {
+        return this->capicity - (this->rear);
     }
 
     void ViewQueue()
@@ -108,7 +109,7 @@ public:
         else
         {
             cout << endl << "The Queue Is :- ";
-            for (int i = this->front; i <= rear; i++)
+            for (int i = this->front + 1; i <= this->rear; i++)
             {
                 cout << array[i] << " ";
             }
@@ -131,9 +132,9 @@ int main()
     do
     {
         cout << endl << "Program's" << endl;
-        cout << "Press 1 To Insert." << endl;        
-        cout << "Press 2 To Pop." << endl;        
-        cout << "Press 3 To Peek." << endl;        
+        cout << "Press 1 To Enqueue." << endl;        
+        cout << "Press 2 To Dequeue." << endl;        
+        cout << "Press 3 To See The Front Elemnt Of The Queue." << endl;        
         cout << "Press 4 To Check If The Queue is Empty Or Not." << endl;        
         cout << "Press 5 To Check If The Queue is Full Or Not." << endl;        
         cout << "Press 6 To Check The Current Size Of Queue." << endl;        
@@ -155,11 +156,11 @@ int main()
             int num;
             cout << "Enter A Number To Insert :- ";
             cin >> num;
-            obj.Push(num);
+            obj.Enqueue(num);
             break;
-        
+            
         case 2:
-            obj.Pop();
+            obj.Dequeue();
             break;
         
         case 3:
@@ -175,11 +176,11 @@ int main()
             break;
         
         case 6:
-            obj.Size();
+            cout << endl << "The Current Size Of The Queue is :- " << obj.Size();
             break;
         
         case 7:
-            obj.Size();
+            cout << endl << "The Remaning Space In The Queue is :- " << obj.Remaning_Size() << endl;
             break;
         
         case 8:
@@ -195,6 +196,7 @@ int main()
             break;
         }
     }
-    while (choice != 0)
+    while (choice != 0);
+
     return 0;
 }
